@@ -1,19 +1,48 @@
-FROM amd64/gradle
+FROM adoptopenjdk:11-jdk-hotspot
 
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+CMD ["gradle"]
 
-RUN apt-get -qq update && \
-    apt-get -qq -y --no-install-recommends install gnupg software-properties-common locales && \
-    locale-gen en_US.UTF-8 && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0x219BD9C9 && \
-    apt-add-repository "deb http://repos.azulsystems.com/ubuntu stable main" && \
-    apt-get -qq update && \
-    apt-get -qq -y dist-upgrade && \
-    apt-get -qq -y --no-install-recommends install zulu-11=11.39+15 && \
-    rm -rf /var/lib/apt/lists/*
+ENV GRADLE_HOME /opt/gradle
 
-ENV JAVA_HOME=/usr/lib/jvm/zulu-11-amd64
+RUN set -o errexit -o nounset \
+    && echo "Adding gradle user and group" \
+    && groupadd --system --gid 1000 gradle \
+    && useradd --system --gid gradle --uid 1000 --shell /bin/bash --create-home gradle \
+    && mkdir /home/gradle/.gradle \
+    && chown --recursive gradle:gradle /home/gradle \
+    \
+    && echo "Symlinking root Gradle cache to gradle Gradle cache" \
+    && ln -s /home/gradle/.gradle /root/.gradle
 
+VOLUME /home/gradle/.gradle
+
+WORKDIR /home/gradle
+
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends \
+        fontconfig \
+        unzip \
+        wget \
+        \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV GRADLE_VERSION 6.5
+ARG GRADLE_DOWNLOAD_SHA256=23e7d37e9bb4f8dabb8a3ea7fdee9dd0428b9b1a71d298aefd65b11dccea220f
+RUN set -o errexit -o nounset \
+    && echo "Downloading Gradle" \
+    && wget --no-verbose --output-document=gradle.zip "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" \
+    \
+    && echo "Checking download hash" \
+    && echo "${GRADLE_DOWNLOAD_SHA256} *gradle.zip" | sha256sum --check - \
+    \
+    && echo "Installing Gradle" \
+    && unzip gradle.zip \
+    && rm gradle.zip \
+    && mv "gradle-${GRADLE_VERSION}" "${GRADLE_HOME}/" \
+    && ln --symbolic "${GRADLE_HOME}/bin/gradle" /usr/bin/gradle \
+    \
+    && echo "Testing Gradle installation" \
+    && gradle --version
 
 COPY . /usr/src/starter
 WORKDIR /usr/src/starter
@@ -21,4 +50,4 @@ WORKDIR /usr/src/starter
 RUN gradle build -Dorg.gradle.daemon=false --no-daemon
 RUN gradle war -Dorg.gradle.daemon=false --no-daemon
 
-CMD ["/usr/lib/jvm/zulu-11-amd64/bin/java", "-jar", "build/libs/alphabattle-0.0.1-SNAPSHOT.war"]
+CMD ["java", "-jar", "build/libs/alphabattle-0.0.1-SNAPSHOT.war"]
