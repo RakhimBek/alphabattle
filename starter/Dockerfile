@@ -17,8 +17,8 @@ ENV JAVA_HOME=/usr/lib/jvm/zulu-11-amd64
 
 COPY . /usr/src/starter
 WORKDIR /usr/src/starter
-RUN ./gradlew build -Dorg.gradle.daemon=false
-RUN ./gradlew war -Dorg.gradle.daemon=false
+RUN ./gradlew build -Dorg.gradle.daemon=false --stacktrace
+RUN ./gradlew war -Dorg.gradle.daemon=false --stacktrace
 RUN ./gradlew build --stacktrace
 
 CMD ["java", "-jar", "build/libs/alphabattle-0.0.1-SNAPSHOT.war"]
