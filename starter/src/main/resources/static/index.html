@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>chat</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    // answers gonna be in console output
+
+    var socket = new SockJS('http://localhost:8080/gs-guide-websocket');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+
+        stompClient.subscribe('/topic/greetings', function (greeting) {
+            console.log(greeting.body);
+        });
+    });
+
+    setTimeout(() => {
+        stompClient.send("/app/hello", {}, 'Hello, Test Stomp 1');
+        stompClient.send("/app/hello", {}, 'Hello, Test Stomp 2');
+        stompClient.send("/app/hello", {}, 'Hello, Test Stomp 3');
+    }, 3000);
+
+
+
+</script>
+</body>
+</html>
