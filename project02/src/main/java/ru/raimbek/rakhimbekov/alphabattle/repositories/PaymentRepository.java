@@ -3,7 +3,7 @@ package ru.raimbek.rakhimbekov.alphabattle.repositories;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import ru.raimbek.rakhimbekov.alphabattle.models.Payment;
+import ru.raimbek.rakhimbekov.alphabattle.dto.Payment;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package ru.raimbek.rakhimbekov.alphabattle.services;
 
 import org.springframework.stereotype.Service;
 import ru.raimbek.rakhimbekov.alphabattle.dto.AnalyticInfo;
-import ru.raimbek.rakhimbekov.alphabattle.models.Payment;
+import ru.raimbek.rakhimbekov.alphabattle.dto.Payment;
 import ru.raimbek.rakhimbekov.alphabattle.repositories.PaymentRepository;
 
 import javax.annotation.Resource;

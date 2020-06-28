@@ -1,6 +1,4 @@
-package ru.raimbek.rakhimbekov.alphabattle.models;
-
-import ru.raimbek.rakhimbekov.alphabattle.dto.AnalyticInfo;
+package ru.raimbek.rakhimbekov.alphabattle.dto;
 
 import java.util.HashMap;
 import java.util.Map;

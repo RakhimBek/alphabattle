@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.raimbek.rakhimbekov.alphabattle.dto.AnalyticInfo;
 import ru.raimbek.rakhimbekov.alphabattle.helpers.ExternalPaymentsHelper;
-import ru.raimbek.rakhimbekov.alphabattle.models.Payment;
-import ru.raimbek.rakhimbekov.alphabattle.models.UserSummary;
+import ru.raimbek.rakhimbekov.alphabattle.dto.Payment;
+import ru.raimbek.rakhimbekov.alphabattle.dto.UserSummary;
 import ru.raimbek.rakhimbekov.alphabattle.services.PaymentService;
 
 import java.util.List;

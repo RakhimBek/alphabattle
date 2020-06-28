@@ -1,17 +1,6 @@
-package ru.raimbek.rakhimbekov.alphabattle.models;
+package ru.raimbek.rakhimbekov.alphabattle.dto;
 
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
 public class Payment {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     private String ref;
     private Double categoryId;
@@ -19,14 +8,6 @@ public class Payment {
     private String recipientId;
     private String desc;
     private Double amount;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getRef() {
         return ref;

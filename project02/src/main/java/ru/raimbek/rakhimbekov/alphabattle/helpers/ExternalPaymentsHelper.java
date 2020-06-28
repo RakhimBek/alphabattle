@@ -4,7 +4,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.http.converter.json.GsonBuilderUtils;
-import ru.raimbek.rakhimbekov.alphabattle.models.Payment;
+import ru.raimbek.rakhimbekov.alphabattle.dto.Payment;
 
 import java.io.BufferedReader;
 import java.io.File;
