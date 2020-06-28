@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/")
+@RequestMapping("api")
 public class AnalyticController {
 
-    @GetMapping(value = "/analytic", produces = "application/json")
+    @GetMapping(value = "analytic", produces = "application/json")
     public String hello() {
         final List<Payment> payments = ExternalPaymentsHelper.getPaymentsFromFile();
         final Set<String> userIds = payments.stream().map(Payment::getUserId).collect(Collectors.toSet());
