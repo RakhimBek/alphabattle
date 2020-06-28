@@ -27,12 +27,6 @@ public class AnalyticController {
     @GetMapping(value = "/analytic", produces = "application/json")
     public String hello() {
         final List<Payment> payments = ExternalPaymentsHelper.getPaymentsFromFile();
-        paymentService.saveAll(payments);
-
-        for (Payment payment : paymentService.findAll()) {
-            System.out.println(payment.getDesc());
-        }
-
         final Set<String> userIds = payments.stream().map(Payment::getUserId).collect(Collectors.toSet());
         final List<List<UserSummary>> list = userIds.stream()
                 .map(id -> groupByCategory(payments, id))
@@ -44,28 +38,25 @@ public class AnalyticController {
                 .toJson(list);
     }
 
-    private static Double categorySummary(List<Payment> payments, String userId) {
-        return payments.stream()
-                .filter(p -> p.getUserId().equals(userId))
-                .map(Payment::getAmount)
-                .reduce(0., Double::sum);
-    }
-
     private static List<UserSummary> groupByCategory(List<Payment> payments, String userId) {
-        return payments.stream()
+        final List<Payment> userPayments = payments.stream()
                 .filter(p -> p.getUserId().equals(userId))
+                .collect(Collectors.toList());
+
+        final Double total = userPayments.stream().map(Payment::getAmount).reduce(0., Double::sum);
+        return userPayments.stream()
                 .collect(Collectors.groupingBy(Payment::getCategoryId))
                 .entrySet()
                 .stream()
                 .map(e -> {
-                    final List<Payment> userPayments = e.getValue();
+                    final List<Payment> categoryPayments = e.getValue();
                     final UserSummary userSummary = new UserSummary();
                     userSummary.setUserId(userId);
-                    userSummary.setTotalSum(categorySummary(payments, userId));
+                    userSummary.setTotalSum(total);
                     userSummary.getAnalyticInfo().put(e.getKey(), new AnalyticInfo(
-                            userPayments.stream().map(Payment::getAmount).min(Double::compareTo).get(),
-                            userPayments.stream().map(Payment::getAmount).max(Double::compareTo).get(),
-                            userPayments.stream().map(Payment::getAmount).reduce(0., Double::sum)
+                            categoryPayments.stream().map(Payment::getAmount).min(Double::compareTo).get(),
+                            categoryPayments.stream().map(Payment::getAmount).max(Double::compareTo).get(),
+                            categoryPayments.stream().map(Payment::getAmount).reduce(0., Double::sum)
                     ));
                     return userSummary;
                 })
