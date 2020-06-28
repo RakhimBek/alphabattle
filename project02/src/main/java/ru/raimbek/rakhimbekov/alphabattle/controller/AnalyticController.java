@@ -1,6 +1,5 @@
 package ru.raimbek.rakhimbekov.alphabattle.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +9,6 @@ import ru.raimbek.rakhimbekov.alphabattle.dto.AnalyticInfo;
 import ru.raimbek.rakhimbekov.alphabattle.helpers.ExternalPaymentsHelper;
 import ru.raimbek.rakhimbekov.alphabattle.dto.Payment;
 import ru.raimbek.rakhimbekov.alphabattle.dto.UserSummary;
-import ru.raimbek.rakhimbekov.alphabattle.services.PaymentService;
 
 import java.util.List;
 import java.util.Set;
@@ -20,9 +18,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/")
 public class AnalyticController {
-
-    @Autowired
-    private PaymentService paymentService;
 
     @GetMapping(value = "/analytic", produces = "application/json")
     public String hello() {
